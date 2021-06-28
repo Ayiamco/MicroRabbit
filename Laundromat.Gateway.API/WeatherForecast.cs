@@ -1,6 +1,6 @@
 using System;
 
-namespace Authentication
+namespace Laundromat.Gateway.API
 {
     public class WeatherForecast
     {

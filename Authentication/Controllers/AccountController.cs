@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Authentication.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -20,6 +20,11 @@ namespace Authentication.Controllers
             this._authService = _authService;
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return Ok( new { message="this is the message", status="success"} );
+        }
 
         [HttpPost("laundry/new")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
