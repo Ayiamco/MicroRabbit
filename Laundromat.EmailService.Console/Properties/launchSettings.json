@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Laundromat.EmailService.Console": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "EmailConfigPassword": "5188joe@G",
+        "EmailConfigPort": "465",
+        "EmailConfigSmtpServer": "smtp.gmail.com",
+        "EmailConfigUsername": "josephachonu@gmail.com",
+        "EmailConfigFrom": "josephachonu@gmail.com"
+      }
+    }
+  }
+}

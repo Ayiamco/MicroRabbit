@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Laundromat.SharedKernel.Core;
 
 namespace Authentication
 {
@@ -95,7 +96,7 @@ namespace Authentication
             services.AddScoped<IIdentityQuery, IdentityQuery>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmployeeInTransitQuery, EmployeeInTransitQuery>();
-            services.AddScoped<IMessageBrokerClient, MessageBrokerClient>();
+            services.AddScoped<IEmailExchange, EmailExchange>();
 
             
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -8,7 +8,7 @@ using MimeKit;
 using System.Linq;
 using System.IO;
 
-namespace Laundromat.EmailService.Console
+namespace Laundromat.EmailService.ConsoleApp
 {
     public class EmailSender : IEmailSender
     {
@@ -19,11 +19,20 @@ namespace Laundromat.EmailService.Console
             _emailConfig = emailConfig;
         }
 
-        public void SendEmail(EmailMessage message, bool IsHTML = false)
+        public int SendEmail(EmailMessage message, bool IsHTML = false)
         {
-            MimeMessage emailMessage;
-            emailMessage = CreateEmailMessage(message, IsHTML: IsHTML);
-            Send(emailMessage);
+            try
+            {
+                MimeMessage emailMessage;
+                emailMessage = CreateEmailMessage(message, IsHTML: IsHTML);
+                Send(emailMessage);
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+            
         }
 
         public async Task SendEmailAsync(EmailMessage message, bool IsHTML = false)

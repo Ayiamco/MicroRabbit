@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.Gateway.API", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.SharedKernel.Core", "Laundromat.SharedKernel.Core\Laundromat.SharedKernel.Core.csproj", "{7AB07C8E-E85B-4D57-80C4-388DBE3A2DA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.EmailService.Console", "Laundromat.EmailService.Console\Laundromat.EmailService.Console.csproj", "{2274BEEF-248C-464E-9526-8F26A4C6A32D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.EmailService.ConsoleApp", "Laundromat.EmailService.Console\Laundromat.EmailService.ConsoleApp.csproj", "{2274BEEF-248C-464E-9526-8F26A4C6A32D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

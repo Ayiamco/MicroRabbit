@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
-using Authentication.Models;
+using Laundromat.SharedKernel.Core;
 
 namespace Authentication.Infrastructure
 {
@@ -31,7 +31,7 @@ namespace Authentication.Infrastructure
         private readonly IConfiguration _config;
         private readonly IEmployeeInTransitQuery _employeeInTransitRepo;
         private readonly IMapper mapper;
-        private readonly IMessageBrokerClient messageBrokerClient;
+        private readonly IEmailExchange emailExchange;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -41,7 +41,7 @@ namespace Authentication.Infrastructure
             IConfiguration config,
             IEmployeeInTransitQuery employeeInTransitRepo,
             IMapper mapper,
-            IMessageBrokerClient messageBrokerClient
+            IEmailExchange emailExchange
             )
         {
             _userManager = userManager;
@@ -52,7 +52,7 @@ namespace Authentication.Infrastructure
             _config = config;
             _employeeInTransitRepo = employeeInTransitRepo;
             this.mapper = mapper;
-            this.messageBrokerClient = messageBrokerClient;
+            this.emailExchange = emailExchange;
         }
 
         public async Task<ServiceResponse> CreateLaundry(RegisterDto model)
@@ -403,7 +403,7 @@ namespace Authentication.Infrastructure
                 "
             };
                 
-            messageBrokerClient.PublishEmail(message);
+            emailExchange.PublishEmail(message);
         }
         private Dictionary<string, string[]> GetErrors(IEnumerable<IdentityError> errors)
         {

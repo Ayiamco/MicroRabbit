@@ -1,12 +1,27 @@
 ﻿using System;
+using Laundromat.SharedKernel.Core;
 
-namespace Laundromat.EmailService.Console
+namespace Laundromat.EmailService.ConsoleApp
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var emailConfiguration=new EmailConfiguration
+            {
+                From = Environment.GetEnvironmentVariable("EmailConfigFrom"),
+                Port = Convert.ToInt32(Environment.GetEnvironmentVariable("EmailConfigPort")),
+                Password=Environment.GetEnvironmentVariable("EmailConfigPassword"),
+                UserName= Environment.GetEnvironmentVariable("EmailConfigUsername"),
+                SmtpServer= Environment.GetEnvironmentVariable("EmailConfigSmtpServer")
+            };
+            
+            var emailSender = new EmailSender(emailConfiguration);
+            var exchange=new EmailExchange();
+            exchange.ConsumeEmail(emailSender);
+            Console.ReadLine(); 
+            
+            
         }
     }
 }
