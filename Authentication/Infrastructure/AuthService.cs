@@ -32,6 +32,7 @@ namespace Authentication.Infrastructure
         private readonly IEmployeeInTransitQuery _employeeInTransitRepo;
         private readonly IMapper mapper;
         private readonly IEmailExchange emailExchange;
+        private readonly ILaundryProfileExchange laundryProfileExchange;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -41,7 +42,8 @@ namespace Authentication.Infrastructure
             IConfiguration config,
             IEmployeeInTransitQuery employeeInTransitRepo,
             IMapper mapper,
-            IEmailExchange emailExchange
+            IEmailExchange emailExchange,
+            ILaundryProfileExchange laundryProfileExchange
             )
         {
             _userManager = userManager;
@@ -53,6 +55,7 @@ namespace Authentication.Infrastructure
             _employeeInTransitRepo = employeeInTransitRepo;
             this.mapper = mapper;
             this.emailExchange = emailExchange;
+            this.laundryProfileExchange = laundryProfileExchange;
         }
 
         public async Task<ServiceResponse> CreateLaundry(RegisterDto model)
@@ -64,7 +67,9 @@ namespace Authentication.Infrastructure
             };
 
             //TODO: call the laudromatMain to add user profile
-            //TODO: call the laudromatMain to add laundry details
+            //publish the create laundry message to the broker
+            laundryProfileExchange.PublichCreateLaundry(new NewLaundryDto { Name = model.LaundryName });
+
 
             user.TwoFactorEnabled = true;
             var result = await _userManager.CreateAsync(user, model.Password); ;

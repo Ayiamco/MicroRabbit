@@ -1,3 +1,6 @@
+using Laundromat.MainProfile.API.Infrastructure;
+using Laundromat.MainProfile.API.Repositories;
+using Laundromat.SharedKernel.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +35,11 @@ namespace Laundrymat.MainProfile.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundrymat.MainProfile.API", Version = "v1" });
             });
+
+            services.AddScoped<ILaundryRepo, LaundryRepo>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<ILaundryProfileExchange,LaundryProfileExchange>();
+            services.AddHostedService<LaundryConsumerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
