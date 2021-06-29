@@ -5,11 +5,15 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication", "Authentication\Authentication.csproj", "{D0695135-8D52-4818-A7C2-D5E7F514ADAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.Gateway.API", "Laundromat.Gateway.API\Laundromat.Gateway.API.csproj", "{79DBD8B5-2E3A-4355-8C8E-70DA5095F9C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laundromat.Gateway.API", "Laundromat.Gateway.API\Laundromat.Gateway.API.csproj", "{79DBD8B5-2E3A-4355-8C8E-70DA5095F9C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.SharedKernel.Core", "Laundromat.SharedKernel.Core\Laundromat.SharedKernel.Core.csproj", "{7AB07C8E-E85B-4D57-80C4-388DBE3A2DA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laundromat.SharedKernel.Core", "Laundromat.SharedKernel.Core\Laundromat.SharedKernel.Core.csproj", "{7AB07C8E-E85B-4D57-80C4-388DBE3A2DA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundromat.EmailService.ConsoleApp", "Laundromat.EmailService.Console\Laundromat.EmailService.ConsoleApp.csproj", "{2274BEEF-248C-464E-9526-8F26A4C6A32D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laundromat.Notification.ConsoleApp", "Laundromat.EmailService.Console\Laundromat.Notification.ConsoleApp.csproj", "{2274BEEF-248C-464E-9526-8F26A4C6A32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcService1", "GrpcService1\GrpcService1.csproj", "{0EB1C302-A0EF-4006-B755-14340E5F910B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laundrymat.MainProfile.API", "Laundrymat.MainProfile.API\Laundrymat.MainProfile.API.csproj", "{1B8B4C27-3DC7-4DCB-AF24-973482FDF418}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{2274BEEF-248C-464E-9526-8F26A4C6A32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2274BEEF-248C-464E-9526-8F26A4C6A32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2274BEEF-248C-464E-9526-8F26A4C6A32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EB1C302-A0EF-4006-B755-14340E5F910B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB1C302-A0EF-4006-B755-14340E5F910B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB1C302-A0EF-4006-B755-14340E5F910B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB1C302-A0EF-4006-B755-14340E5F910B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8B4C27-3DC7-4DCB-AF24-973482FDF418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8B4C27-3DC7-4DCB-AF24-973482FDF418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8B4C27-3DC7-4DCB-AF24-973482FDF418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8B4C27-3DC7-4DCB-AF24-973482FDF418}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
