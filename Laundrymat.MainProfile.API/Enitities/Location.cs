@@ -7,5 +7,10 @@ namespace Laundromat.MainProfile.API.Enitities
 {
     public class Location
     {
+        public int Id { get; set; }
+        public string Country { get; set; }
+        public string State { get; set; }
+        public string LGA { get; set; }
+        public string Street { get; set; }
     }
 }

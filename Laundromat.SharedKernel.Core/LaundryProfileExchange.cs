@@ -4,6 +4,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Laundromat.SharedKernel.Core
 {
@@ -24,12 +25,10 @@ namespace Laundromat.SharedKernel.Core
         {
             var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(newLaundryDto));
             channel.BasicPublish("LaundryProfileExchangeDirect", "laundryProfile", null, body);
-            channel.Dispose();
-            connection.Dispose();
 
         }
 
-        public void ConsumeCreateLaundry(IAddLaundryRepo laundryRepo)
+        public void ConsumeCreateLaundry(IAddLaundryCommand laundryRepo)
         {
 
             channel.QueueDeclare("LaundryProfileExchange-queue",
@@ -37,20 +36,21 @@ namespace Laundromat.SharedKernel.Core
 
             //bind consumer to the  exchange
             channel.QueueBind("LaundryProfileExchange-queue", "LaundryProfileExchangeDirect", "laundryProfile");
-
+            Console.WriteLine("Subscribing to the LaundryProfile Queue.");
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (sender, e) =>
+            consumer.Received +=  async (sender, e) =>
             {
-                Console.WriteLine("message recieved");
+                Console.WriteLine("Laundry creation message recieved.");
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var newlaundryDto = JsonConvert.DeserializeObject<NewLaundryDto>(message);
-                laundryRepo.AddLaundry(newlaundryDto);
-
+                var laundryId= await  laundryRepo.AddLaundry(newlaundryDto);
+                Console.WriteLine($@"Laundry created :: Id:{laundryId} Name:{newlaundryDto.LaundryName}");
 
             };
 
-            channel.BasicConsume("direct-exchange-queue", true, consumer);
+            channel.BasicConsume("LaundryProfileExchange-queue", true, consumer);
+            Console.WriteLine("Subscribing to the LaundryProfile Queue was successfull");
         }
     }
 }

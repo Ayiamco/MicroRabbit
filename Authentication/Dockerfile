@@ -10,6 +10,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["Authentication/Authentication.csproj", "Authentication/"]
+COPY ["Laundromat.SharedKernel.Core/Laundromat.SharedKernel.Core.csproj", "Laundromat.SharedKernel.Core/"]
 RUN dotnet restore "Authentication/Authentication.csproj"
 COPY . .
 WORKDIR "/src/Authentication"

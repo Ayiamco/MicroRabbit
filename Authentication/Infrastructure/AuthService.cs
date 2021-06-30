@@ -68,7 +68,8 @@ namespace Authentication.Infrastructure
 
             //TODO: call the laudromatMain to add user profile
             //publish the create laundry message to the broker
-            laundryProfileExchange.PublichCreateLaundry(new NewLaundryDto { Name = model.LaundryName });
+            laundryProfileExchange.PublichCreateLaundry(new NewLaundryDto { LaundryName = model.LaundryName });
+
 
 
             user.TwoFactorEnabled = true;

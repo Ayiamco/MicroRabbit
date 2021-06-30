@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Laundromat.MainProfile.API.Repositories
 {
-    public interface ILaundryRepo:IGenericRepo<Laundry,Guid>, IAddLaundryRepo
+    public interface ILaundryRepo:IGenericRepo<Laundry,Guid>
     {
     }
 }

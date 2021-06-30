@@ -6,7 +6,7 @@ namespace Laundromat.SharedKernel.Core
     {
         IModel channel { get; set; }
         IConnection connection { get; set; }
-        void ConsumeCreateLaundry(IAddLaundryRepo laundryRepo);
+        void ConsumeCreateLaundry(IAddLaundryCommand laundryRepo);
         void PublichCreateLaundry(NewLaundryDto newLaundryDto);
     }
 }

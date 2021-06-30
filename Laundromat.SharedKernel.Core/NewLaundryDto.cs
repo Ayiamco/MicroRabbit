@@ -6,6 +6,6 @@ namespace Laundromat.SharedKernel.Core
 {
     public class NewLaundryDto
     {
-        public string Name { get; set; }
+        public string LaundryName { get; set; }
     }
 }

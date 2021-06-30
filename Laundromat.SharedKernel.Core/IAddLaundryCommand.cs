@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Laundromat.SharedKernel.Core
 {
-    public interface IAddLaundryRepo
+    public interface IAddLaundryCommand
     {
-        Task AddLaundry(NewLaundryDto laundryDto);
+        Task<Guid> AddLaundry(NewLaundryDto laundryDto);
     }
 }
