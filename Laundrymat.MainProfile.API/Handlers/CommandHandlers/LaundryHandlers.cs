@@ -13,9 +13,12 @@ namespace Laundromat.MainProfile.API.Handlers.CommandHandlers
     public class UpdateLaundryCommandHandler : IRequestHandler<UpdateLaundryRequestModel, HandlerResponse<string>>
     {
         private readonly ILaundryRepo laundryRepo;
-        public UpdateLaundryCommandHandler(ILaundryRepo laundryRepo)
+        private readonly IUnitOfWork unitOfWork;
+
+        public UpdateLaundryCommandHandler(ILaundryRepo laundryRepo, IUnitOfWork unitOfWork)
         {
             this.laundryRepo = laundryRepo;
+            this.unitOfWork = unitOfWork;
         }
         public async Task<HandlerResponse<string>> Handle(UpdateLaundryRequestModel request, CancellationToken cancellationToken)
         {
@@ -28,9 +31,7 @@ namespace Laundromat.MainProfile.API.Handlers.CommandHandlers
                 }
             };
 
-            
-            // Your business logic here
-
+            await unitOfWork.SaveAsync();
             return result;
         }
     }

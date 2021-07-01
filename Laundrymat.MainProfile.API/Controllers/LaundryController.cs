@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Laundromat.MainProfile.API.RequestModels.CommandRequests;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,9 +20,12 @@ namespace Laundromat.MainProfile.API.Controllers
             this.mediator = mediator;
         }
         
-        public IActionResult UpdateLaundry([FromBody] Update updateLaundryModel )
+        [HttpPost]
+        public async Task<IActionResult> UpdateLaundry([FromBody] UpdateLaundryRequestModel updateLaundryModel )
         {
-            mediator.Send(upd)
+           var resp=await  mediator.Send(updateLaundryModel);
+
+            return Ok();
         }
             
     }

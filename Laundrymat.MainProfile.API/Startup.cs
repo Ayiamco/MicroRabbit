@@ -3,6 +3,7 @@ using Laundromat.MainProfile.API.Infrastructure;
 using Laundromat.MainProfile.API.Repositories;
 using Laundromat.MainProfile.API.Services;
 using Laundromat.SharedKernel.Core;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Laundrymat.MainProfile.API
@@ -45,7 +47,10 @@ namespace Laundrymat.MainProfile.API
             services.AddScoped<IAddLaundryCommand, LaundryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ILaundryProfileExchange,LaundryProfileExchange>();
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddHostedService<LaundryConsumerService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
