@@ -47,10 +47,14 @@ namespace Authentication
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
             });
 
-            
+            // Database connection string.
+            // Make sure to make the  Password value the same as that in the docker compose file "Your_password123" to your actual password.
+            var connection = @"Server=db;Database=master;User=sa;Password=Your_password123;";
             services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly("Authentication")));
+                        options.UseSqlServer(connection));
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //            b => b.MigrationsAssembly("Authentication")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {

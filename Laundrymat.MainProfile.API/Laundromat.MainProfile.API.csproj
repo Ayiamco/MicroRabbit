@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
@@ -24,7 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Handlers\QueryHandlers\" />
+    <Folder Include="Handlers\Interfaces\CommandHandlers\" />
+    <Folder Include="Handlers\Interfaces\QueryHandlers\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="RequestModels\QueryRequests\" />
   </ItemGroup>
 
 </Project>
