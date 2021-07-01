@@ -19,6 +19,12 @@ namespace Laundromat.MainProfile.API.Controllers
         {
             this.mediator = mediator;
         }
+
+        [HttpGet]
+        public string Index()
+        {
+            return "this is test";
+        }
         
         [HttpPost]
         public async Task<IActionResult> UpdateLaundry([FromBody] UpdateLaundryRequestModel updateLaundryModel )

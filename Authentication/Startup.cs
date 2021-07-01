@@ -101,7 +101,7 @@ namespace Authentication
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmployeeInTransitQuery, EmployeeInTransitQuery>();
             services.AddScoped<IEmailExchange, EmailExchange>();
-            services.AddSingleton<ILaundryProfileExchange, LaundryProfileExchange>();
+            services.AddSingleton<IMessageBrokerPublisher<NewLaundry>, AddLaundryPublisher>();
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         }

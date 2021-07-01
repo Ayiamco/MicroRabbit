@@ -1,4 +1,7 @@
-﻿using Laundromat.SharedKernel.Core;
+﻿using Laundromat.MainProfile.API.RequestModels.CommandRequests;
+using Laundromat.MainProfile.API.ResponseModels;
+using Laundromat.SharedKernel.Core;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -11,22 +14,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Laundromat.MainProfile.API.Infrastructure
+namespace Laundromat.MainProfile.API.BackgroudWorkers
 {
-        public class LaundryConsumerService : BackgroundService
+    public class LaundryAddedSubscriber : MessageBrokerSubscriberBase
     {
-        private IServiceProvider _sp;
-        private IModel  channel;
-
-
-        public LaundryConsumerService(IServiceProvider sp)
+        public LaundryAddedSubscriber(IServiceProvider sp)
+            :base(sp, "LaundryProfileExchangeDirect", ExchangeType.Direct)
         {
-            var factory = new ConnectionFactory { Uri = new Uri("amqp://guest:guest@localhost:5672") };
-            var connection = factory.CreateConnection();
-            channel = connection.CreateModel();
-            channel.ExchangeDeclare("LaundryProfileExchangeDirect", ExchangeType.Direct);
-            _sp = sp;
-
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,9 +31,10 @@ namespace Laundromat.MainProfile.API.Infrastructure
             if (stoppingToken.IsCancellationRequested)
             {
                 channel.Dispose();
-                //connection.Dispose();
+                connection.Dispose();
                 return Task.CompletedTask;
             }
+
             channel.QueueDeclare("LaundryProfileExchange-queue",
                 durable: true, exclusive: false, autoDelete: false, arguments: null);
 
@@ -60,12 +55,15 @@ namespace Laundromat.MainProfile.API.Infrastructure
                     Console.WriteLine("Laundry creation message recieved.");
                     var body = e.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    var newlaundryDto = JsonConvert.DeserializeObject<NewLaundryDto>(message);
+                    var newlaundryDto = JsonConvert.DeserializeObject<NewLaundry>(message);
                     using (var scope = _sp.CreateScope())
                     {
-                        var db = scope.ServiceProvider.GetRequiredService<IAddLaundryCommand>();
-                        var laundryId = await db.AddLaundry(newlaundryDto);
-                        Console.WriteLine($@"Laundry created :: Id:{laundryId} Name:{newlaundryDto.LaundryName}");
+                        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                        var mediatorResponse = await mediator.Send((AddLaundryRequestModel) newlaundryDto);
+                        if(mediatorResponse.Status == HandlerResponseStatus.Succeeded)
+                            Console.WriteLine($@"Laundry created :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
+                        else
+                            Console.WriteLine($@"Laundry created failure :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
                     }
                     
 

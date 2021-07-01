@@ -14,9 +14,9 @@ namespace Laundromat.MainProfile.API.Repositories
 
         }
 
-        public async Task AddLaundry(NewLaundryDto laundryDto)
+        public async Task AddLaundry(NewLaundry laundryDto)
         {
-            var laundry = new Laundry { CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Name = laundryDto.LaundryName };
+            var laundry = new Laundry { CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Name = laundryDto.LaundryName , Address= new Location()  };
             await Create(laundry);
             return;
         }

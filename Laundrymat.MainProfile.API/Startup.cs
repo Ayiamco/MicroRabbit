@@ -1,5 +1,4 @@
 using Laundromat.MainProfile.API.Enitities;
-using Laundromat.MainProfile.API.Infrastructure;
 using Laundromat.MainProfile.API.Repositories;
 using Laundromat.MainProfile.API.Services;
 using Laundromat.SharedKernel.Core;
@@ -40,16 +39,15 @@ namespace Laundrymat.MainProfile.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundrymat.MainProfile.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundrymat MainProfile API", Version = "v1" });
             });
 
             services.AddScoped<ILaundryRepo, LaundryRepo>();
-            services.AddScoped<IAddLaundryCommand, LaundryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ILaundryProfileExchange,LaundryProfileExchange>();
+            
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddHostedService<LaundryConsumerService>();
+            //services.AddHostedService<LaundryConsumerService>();
 
         }
 
@@ -60,7 +58,7 @@ namespace Laundrymat.MainProfile.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Laundrymat.MainProfile.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Laundrymat MainProfile API v1"));
             }
 
             app.UseHttpsRedirection();

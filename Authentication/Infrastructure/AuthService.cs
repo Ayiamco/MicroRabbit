@@ -32,7 +32,7 @@ namespace Authentication.Infrastructure
         private readonly IEmployeeInTransitQuery _employeeInTransitRepo;
         private readonly IMapper mapper;
         private readonly IEmailExchange emailExchange;
-        private readonly ILaundryProfileExchange laundryProfileExchange;
+        private readonly IMessageBrokerPublisher<NewLaundry> messagePublisher;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -43,7 +43,7 @@ namespace Authentication.Infrastructure
             IEmployeeInTransitQuery employeeInTransitRepo,
             IMapper mapper,
             IEmailExchange emailExchange,
-            ILaundryProfileExchange laundryProfileExchange
+            IMessageBrokerPublisher<NewLaundry> messagePublisher
             )
         {
             _userManager = userManager;
@@ -55,7 +55,7 @@ namespace Authentication.Infrastructure
             _employeeInTransitRepo = employeeInTransitRepo;
             this.mapper = mapper;
             this.emailExchange = emailExchange;
-            this.laundryProfileExchange = laundryProfileExchange;
+            this.messagePublisher=  messagePublisher;
         }
 
         public async Task<ServiceResponse> CreateLaundry(RegisterDto model)
@@ -68,7 +68,7 @@ namespace Authentication.Infrastructure
 
             //TODO: call the laudromatMain to add user profile
             //publish the create laundry message to the broker
-            laundryProfileExchange.PublichCreateLaundry(new NewLaundryDto { LaundryName = model.LaundryName });
+            messagePublisher.PublishEvent(new NewLaundry { LaundryName = model.LaundryName });
 
 
 
