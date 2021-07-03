@@ -1,8 +1,10 @@
-﻿using Laundromat.MainProfile.API.Enitities;
+﻿using AutoMapper;
+using Laundromat.MainProfile.API.Enitities;
 using Laundromat.MainProfile.API.Repositories;
 using Laundromat.MainProfile.API.RequestModels.CommandRequests;
 using Laundromat.MainProfile.API.ResponseModels;
 using MediatR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,52 +16,61 @@ namespace Laundromat.MainProfile.API.Handlers.CommandHandlers
     
     public abstract  class LaundryCommandHandler
     {
-        protected readonly ILaundryRepo laundryRepo;
         protected readonly IUnitOfWork unitOfWork;
+        protected readonly IMapper mapper;
 
-        public LaundryCommandHandler(ILaundryRepo laundryRepo, IUnitOfWork unitOfWork)
+        public LaundryCommandHandler( IUnitOfWork unitOfWork,IMapper mapper)
         {
-            this.laundryRepo = laundryRepo;
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
     }
+
     public class UpdateLaundryCommandHandler :LaundryCommandHandler, IRequestHandler<UpdateLaundryRequestModel, HandlerResponse<string>>
     {
-        public UpdateLaundryCommandHandler(ILaundryRepo laundryRepo, IUnitOfWork unitOfWork):
-            base(laundryRepo,unitOfWork)
+        public UpdateLaundryCommandHandler( IUnitOfWork unitOfWork,IMapper mapper):
+            base(unitOfWork,mapper)
         {
             
         }
-        public async Task<HandlerResponse<string>> Handle(UpdateLaundryRequestModel request, CancellationToken cancellationToken)
+        public async Task<HandlerResponse<string>> Handle(UpdateLaundryRequestModel requestData, CancellationToken cancellationToken)
         {
-            var result = new HandlerResponse<string>
+            var laundryInDb=await  unitOfWork.LaundryRepo.Read(requestData.Id);
+            if(laundryInDb == null) return new HandlerResponse<string>
             {
-                Status = HandlerResponseStatus.Succeeded,
-                Data = new APIResponse<string>
-                {
-                    Status="success"
+                Status = HandlerResponseStatus.Failed,
+                Data = new APIResponse<string>{ Status = "failed", Message = "laundry does not exist",
+                    Errors = JsonConvert.SerializeObject(new { laundryId = new string[] {"laundry Id is not a valid laundry " } })
                 }
             };
 
-            await unitOfWork.SaveAsync();
-            return result;
-        }
+            var updatedLaundry =mapper.Map<Laundry>(requestData);
+            mapper.Map(updatedLaundry, laundryInDb);
+            var rowsAffected=await unitOfWork.SaveAsync();
+            if (rowsAffected ==1 ) return new HandlerResponse<string>
+            {
+                Status = HandlerResponseStatus.Succeeded,
+                Data = new APIResponse<string>{ Status = "success", Message= $"{laundryInDb.Name} laundry updated successfully"}
+            };
 
-       
+            return  new HandlerResponse<string>
+            {
+                Status = HandlerResponseStatus.Failed,
+                Data = new APIResponse<string>{Status = "failed", Message="failed to update laundry"}
+            };      
+        } 
     }
 
     public class AddLaundryCommandHandler :LaundryCommandHandler, IRequestHandler<AddLaundryRequestModel, HandlerResponse<Guid>>
     {
-        public AddLaundryCommandHandler(ILaundryRepo laundryRepo,IUnitOfWork unitOfWork):
-            base(laundryRepo,unitOfWork)
+        public AddLaundryCommandHandler(IUnitOfWork unitOfWork,IMapper mapper):base(unitOfWork,mapper)
         {
-
         }
 
-        public async Task<HandlerResponse<Guid>> Handle(AddLaundryRequestModel laundryDto, CancellationToken cancellationToken)
+        public async Task<HandlerResponse<Guid>> Handle(AddLaundryRequestModel requestData, CancellationToken cancellationToken)
         {
-            var laundry = new Laundry { Name = laundryDto.LaundryName, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
-            await laundryRepo.Create(laundry);
+            var laundry = mapper.Map<Laundry>(requestData);
+            await unitOfWork.LaundryRepo.Create(laundry);
             var rowsChanged = await unitOfWork.SaveAsync();
             if (rowsChanged != 1) return new HandlerResponse<Guid> { Status=HandlerResponseStatus.Failed,
                 Data= new APIResponse<Guid> {Status="failed",Message="laundry Failed to save" }

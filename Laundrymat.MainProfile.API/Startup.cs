@@ -1,8 +1,9 @@
+using Laundromat.MainProfile.API.BackgroudWorkers;
 using Laundromat.MainProfile.API.Enitities;
 using Laundromat.MainProfile.API.Repositories;
-using Laundromat.MainProfile.API.Services;
-using Laundromat.SharedKernel.Core;
+
 using MediatR;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,12 +43,13 @@ namespace Laundrymat.MainProfile.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundrymat MainProfile API", Version = "v1" });
             });
 
-            services.AddScoped<ILaundryRepo, LaundryRepo>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            //services.AddHostedService<LaundryConsumerService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddHostedService<LaundryAddedSubscriber>();
 
         }
 

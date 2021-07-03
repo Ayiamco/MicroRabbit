@@ -10,9 +10,9 @@ namespace Laundromat.SharedKernel.Core
 {
    public  class AddLaundryPublisher : MessageBrokerPublisherBase<NewLaundry>
    {
-        public AddLaundryPublisher():base("","","")
+        public AddLaundryPublisher():base("",ExchangeType.Direct,"")
         {
 
-        }
+        } 
    }
 }

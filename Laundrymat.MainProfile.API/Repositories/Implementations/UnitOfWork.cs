@@ -14,6 +14,7 @@ namespace Laundromat.MainProfile.API.Repositories
             this._context = _context;
         }
 
+        public ILaundryRepo LaundryRepo => new LaundryRepo(_context);
         public int Save()
         {
             return _context.SaveChanges();

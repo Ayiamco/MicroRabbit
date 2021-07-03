@@ -7,6 +7,7 @@ namespace Laundromat.MainProfile.API.Repositories
 {
     public interface IUnitOfWork
     {
+        public ILaundryRepo LaundryRepo { get;  }
         public Task<int> SaveAsync();
         public int Save();
     }
