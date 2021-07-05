@@ -24,6 +24,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Laundromat.SharedKernel.Core;
+using RabbitMQ.Client;
+using Laundromat.SharedKernel.Core.MessageBroker;
 
 namespace Authentication
 {
@@ -48,13 +50,15 @@ namespace Authentication
             });
 
             // Database connection string.
-            // Make sure to make the  Password value the same as that in the docker compose file "Your_password123" to your actual password.
-            var connection = @"Server=db;Database=master;User=sa;Password=Your_password123;";
-            services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(connection));
+            // Uncomment when running database as docker containers
+            //Make sure to make the  Password value the same as that in the docker compose file "Your_password123" to your actual password.
+            //var connection = @"Server=db;Database=master;User=sa;Password=Your_password123;";
             //services.AddDbContext<ApplicationDbContext>(options =>
-            //            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-            //            b => b.MigrationsAssembly("Authentication")));
+            //            options.UseSqlServer(connection));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                        b => b.MigrationsAssembly("Authentication")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {
@@ -103,6 +107,11 @@ namespace Authentication
             services.AddScoped<IEmailExchange, EmailExchange>();
             services.AddSingleton<IMessageBrokerPublisher<NewLaundry>, AddLaundryPublisher>();
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            var factory = new ConnectionFactory { Uri = new Uri("amqp://guest:guest@localhost:5672") };
+            var connection = factory.CreateConnection();
+            var channel = connection.CreateModel();
+            channel.ExchangeDeclare(BrokerExchangeNames.LaundryExchange,ExchangeType.Direct );
 
         }
     

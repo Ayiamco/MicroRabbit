@@ -70,9 +70,10 @@ namespace Laundromat.MainProfile.API.Handlers.CommandHandlers
         public async Task<HandlerResponse<Guid>> Handle(AddLaundryRequestModel requestData, CancellationToken cancellationToken)
         {
             var laundry = mapper.Map<Laundry>(requestData);
+            laundry.Address = new Location();
             await unitOfWork.LaundryRepo.Create(laundry);
             var rowsChanged = await unitOfWork.SaveAsync();
-            if (rowsChanged != 1) return new HandlerResponse<Guid> { Status=HandlerResponseStatus.Failed,
+            if (rowsChanged != 2) return new HandlerResponse<Guid> { Status=HandlerResponseStatus.Failed,
                 Data= new APIResponse<Guid> {Status="failed",Message="laundry Failed to save" }
             };
             return new HandlerResponse<Guid> { Status=HandlerResponseStatus.Succeeded,

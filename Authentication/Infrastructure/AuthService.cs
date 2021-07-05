@@ -32,7 +32,7 @@ namespace Authentication.Infrastructure
         private readonly IEmployeeInTransitQuery _employeeInTransitRepo;
         private readonly IMapper mapper;
         private readonly IEmailExchange emailExchange;
-        private readonly IMessageBrokerPublisher<NewLaundry> messagePublisher;
+        private readonly IMessageBrokerPublisher<NewLaundry> newLaundryMessagePublisher;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -55,7 +55,7 @@ namespace Authentication.Infrastructure
             _employeeInTransitRepo = employeeInTransitRepo;
             this.mapper = mapper;
             this.emailExchange = emailExchange;
-            this.messagePublisher=  messagePublisher;
+            this.newLaundryMessagePublisher=  messagePublisher;
         }
 
         public async Task<ServiceResponse> CreateLaundry(RegisterDto model)
@@ -66,11 +66,8 @@ namespace Authentication.Infrastructure
                 Email = model.Username,
             };
 
-            //TODO: call the laudromatMain to add user profile
             //publish the create laundry message to the broker
-            messagePublisher.PublishEvent(new NewLaundry { LaundryName = model.LaundryName });
-
-
+            newLaundryMessagePublisher.PublishEvent(new NewLaundry { LaundryName = model.LaundryName,OwnerName= model.OwnerName });
 
             user.TwoFactorEnabled = true;
             var result = await _userManager.CreateAsync(user, model.Password); ;

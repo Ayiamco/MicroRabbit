@@ -10,6 +10,7 @@ namespace Authentication.Infrastructure
     {
         public AutoMapperProfile()
         {
+
            
         }
     }

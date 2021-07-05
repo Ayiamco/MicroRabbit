@@ -1,6 +1,8 @@
-﻿using Laundromat.MainProfile.API.RequestModels.CommandRequests;
+﻿using AutoMapper;
+using Laundromat.MainProfile.API.RequestModels.CommandRequests;
 using Laundromat.MainProfile.API.ResponseModels;
 using Laundromat.SharedKernel.Core;
+using Laundromat.SharedKernel.Core.MessageBroker;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +21,7 @@ namespace Laundromat.MainProfile.API.BackgroudWorkers
     public class LaundryAddedSubscriber : MessageBrokerSubscriberBase
     {
         public LaundryAddedSubscriber(IServiceProvider sp)
-            :base(sp, "LaundryProfileExchangeDirect", ExchangeType.Direct)
+            :base(sp, BrokerExchangeNames.LaundryExchange, ExchangeType.Direct)
         {
         }
 
@@ -35,43 +37,48 @@ namespace Laundromat.MainProfile.API.BackgroudWorkers
                 return Task.CompletedTask;
             }
 
-            channel.QueueDeclare("LaundryProfileExchange-queue",
+            var queueName = "LaundryProfileExchange-queue";
+            channel.QueueDeclare(queueName,
                 durable: true, exclusive: false, autoDelete: false, arguments: null);
 
             //bind consumer to the  exchange
-            channel.QueueBind("LaundryProfileExchange-queue", "LaundryProfileExchangeDirect", "laundryProfile");
-            Console.WriteLine("Subscribing to the LaundryProfile Queue.");
+            channel.QueueBind(queueName,BrokerExchangeNames.LaundryExchange, BrokerRoutingKeys.AddLaundryKey);
+            Console.WriteLine($"Subscribing to the {BrokerExchangeNames.LaundryExchange} exchange.");
             var consumer = new EventingBasicConsumer(channel);
             Task.Run(() =>
             {
-                // BackgroundService is a Singleton service
-                // IAddLaundryCommand is declared a Scoped service
-                // by definition a Scoped service can't be consumed inside a Singleton
-                // to solve this, we create a custom scope inside the Singleton and 
-                // perform the insertion.
+                // BackgroundService is a Singleton service a Scoped service can't be consumed inside a Singleton
+                // to solve this, we create a custom scope inside the Singleton and perform the insertion.
                 
                 consumer.Received += async (sender, e) =>
                 {
-                    Console.WriteLine("Laundry creation message recieved.");
+                    Console.WriteLine($"Laundry creation message recieved from {e.Exchange} exchange");
                     var body = e.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     var newlaundryDto = JsonConvert.DeserializeObject<NewLaundry>(message);
-                    using (var scope = _sp.CreateScope())
+                    if(!string.IsNullOrEmpty(newlaundryDto.LaundryName) && !string.IsNullOrEmpty(newlaundryDto.OwnerName))
                     {
-                        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                        var mediatorResponse = await mediator.Send((AddLaundryRequestModel) newlaundryDto);
-                        if(mediatorResponse.Status == HandlerResponseStatus.Succeeded)
-                            Console.WriteLine($@"Laundry created :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
-                        else
-                            Console.WriteLine($@"Laundry created failure :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
+                        using (var scope = _sp.CreateScope())
+                        {
+                            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                            var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+                            var requestModel = mapper.Map<AddLaundryRequestModel>(newlaundryDto);
+                            var mediatorResponse = await mediator.Send(requestModel);
+                            if (mediatorResponse.Status == HandlerResponseStatus.Succeeded)
+                                Console.WriteLine($@"Laundry created :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
+
+                            else
+                                Console.WriteLine($@"Laundry created failure :: Id:{mediatorResponse.Data.Data} Name:{newlaundryDto.LaundryName}");
+                        }
                     }
+                    channel.BasicAck(1, false);
                     
 
                 };
                 
             });
 
-            channel.BasicConsume("LaundryProfileExchange-queue", true, consumer);
+            channel.BasicConsume(queueName, false, consumer);
             Console.WriteLine("Subscribing to the LaundryProfile Queue was successfull");
             return Task.CompletedTask;
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Laundromat.MainProfile.API.Enitities;
 using Laundromat.MainProfile.API.RequestModels.CommandRequests;
+using Laundromat.SharedKernel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Laundromat.MainProfile.API.Infrastructure
     {
         public AutoMapperProfile()
         {
+            CreateMap<AddLaundryRequestModel, NewLaundry>().ReverseMap();
             CreateMap<UpdateLaundryRequestModel, Laundry>()
                 .ForMember(x => x.UpdatedAt, y => y.MapFrom(d => DateTime.Now))
                 .ForMember(x => x.CreatedAt, y => y.Ignore());
