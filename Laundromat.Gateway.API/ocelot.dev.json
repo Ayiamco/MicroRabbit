@@ -11,9 +11,24 @@
         }
       ],
       "UpstreamPathTemplate": "/api/account",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "Auth"
     }
   ],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "Auth",
+      "Config": [
+        {
+          "Name": "Authentication",
+          "Version": "v1",
+          "Url": "http://localhost:5050/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:5031"
   }

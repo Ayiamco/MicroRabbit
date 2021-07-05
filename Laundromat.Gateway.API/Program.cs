@@ -25,7 +25,8 @@ namespace Laundromat.Gateway.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.ConfigureAppConfiguration(config => config.AddJsonFile($"ocelot.{env}.json"));
+                    webBuilder.ConfigureAppConfiguration(config => config.AddJsonFile($"ocelot.dev.json"));
+                    //webBuilder.ConfigureAppConfiguration(config => config.AddJsonFile($"ocelot.LaundryMain.json"));
                 }).ConfigureLogging(logging => logging.AddConsole());
         }
             

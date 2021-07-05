@@ -30,13 +30,14 @@ namespace Laundromat.Gateway.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddControllers();
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundromat.Gateway.API", Version = "v1" });
-            //});
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Laundromat.Gateway.API", Version = "v1" });
+            });
 
             services.AddOcelot();
+            services.AddSwaggerForOcelot(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,8 +46,8 @@ namespace Laundromat.Gateway.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Laundromat.Gateway.API v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Laundromat.Gateway.API v1"));
             }
 
             //app.UseHttpsRedirection();
@@ -57,10 +58,14 @@ namespace Laundromat.Gateway.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>  await context.Response.Body.WriteAsync(Encoding.ASCII.GetBytes("Hello world")));
+                endpoints.MapControllers();
             });
 
             app.UseOcelot().Wait();
+            app.UseSwaggerForOcelotUI(opt =>
+            {
+                opt.PathToSwaggerGenerator = "/swagger/docs";
+            });
         }
     }
 }

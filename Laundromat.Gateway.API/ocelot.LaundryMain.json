@@ -1,0 +1,33 @@
+{
+
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/laundry",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5661
+        }
+      ],
+      "UpstreamPathTemplate": "/api/laundry",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "laundryMain"
+    }
+  ],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "LaundryMain",
+      "Config": [
+        {
+          "Name": "LaundryMain API",
+          "Version": "v1",
+          "Url": "http://localhost:5661/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  
+
+}
