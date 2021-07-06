@@ -1,6 +1,6 @@
 {
 
-  "Routes": [
+  "ReRoutes": [
     {
       "DownstreamPathTemplate": "/account",
       "DownstreamScheme": "https",
@@ -23,7 +23,7 @@
         {
           "Name": "Authentication",
           "Version": "v1",
-          "Url": "http://localhost:5050/swagger/v1/swagger.json"
+          "Url": "http://localhost:5051/swagger/v1/swagger.json"
         }
       ]
     }
