@@ -1,6 +1,6 @@
 {
 
-  "ReRoutes": [
+  "Routes": [
     {
       "DownstreamPathTemplate": "/account",
       "DownstreamScheme": "https",
@@ -8,11 +8,26 @@
         {
           "Host": "localhost",
           "Port": 5050
+
         }
       ],
       "UpstreamPathTemplate": "/api/account",
       "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "Auth"
+    },
+    {
+      "DownstreamPathTemplate": "/laundry",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5661
+
+        }
+      ],
+      "UpstreamPathTemplate": "/api/laundry",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "main"
     }
   ],
 
@@ -23,7 +38,17 @@
         {
           "Name": "Authentication",
           "Version": "v1",
-          "Url": "http://localhost:5051/swagger/v1/swagger.json"
+          "Url": "https://localhost:5050/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "main",
+      "Config": [
+        {
+          "Name": "Main Api",
+          "Version": "v1",
+          "Url": "https://localhost:5661/swagger/v1/swagger.json"
         }
       ]
     }

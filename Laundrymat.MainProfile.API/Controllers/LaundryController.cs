@@ -26,7 +26,7 @@ namespace Laundromat.MainProfile.API.Controllers
             return "this is test";
         }
         
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateLaundry([FromBody] UpdateLaundryRequestModel updateLaundryModel )
         {
            var resp=await  mediator.Send(updateLaundryModel);
