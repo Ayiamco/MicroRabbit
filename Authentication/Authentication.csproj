@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Joe\.nuget\packages\nlog.config\4.7.10\contentFiles\any\any\NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />
@@ -20,11 +28,18 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="MMLib.SwaggerForOcelot" Version="1.10.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.10" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.13.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net5.0\nlog.config" />
+    <None Include="nlog.config" />
   </ItemGroup>
 
   <ItemGroup>

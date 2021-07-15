@@ -14,6 +14,7 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using Laundromat.SharedKernel.Core;
+using Microsoft.Extensions.Logging;
 
 namespace Authentication.Infrastructure
 {
@@ -25,6 +26,7 @@ namespace Authentication.Infrastructure
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signManager;
+        private readonly ILogger<AuthService> logger;
         private readonly IJWTManager _jwtmanager;
         private readonly IIdentityQuery _userRepo;
         private readonly IUnitOfWork _unitOFWork;
@@ -35,7 +37,7 @@ namespace Authentication.Infrastructure
         private readonly IMessageBrokerPublisher<NewLaundry> newLaundryMessagePublisher;
 
         public AuthService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            SignInManager<ApplicationUser> signInManager,   ILogger<AuthService> logger,
             IJWTManager jwtmanager,
             IIdentityQuery userRepo,
             IUnitOfWork unitOfWork,
@@ -48,6 +50,7 @@ namespace Authentication.Infrastructure
         {
             _userManager = userManager;
             _signManager = signInManager;
+            this.logger = logger;
             _jwtmanager = jwtmanager;
             _userRepo = userRepo;
             _unitOFWork = unitOfWork;
@@ -65,6 +68,7 @@ namespace Authentication.Infrastructure
                 UserName = model.Username,
                 Email = model.Username,
             };
+            logger.LogError("this is me testing the error");
 
             //publish the create laundry message to the broker
             newLaundryMessagePublisher.PublishEvent(new NewLaundry { LaundryName = model.LaundryName,OwnerName= model.OwnerName });

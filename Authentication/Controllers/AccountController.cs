@@ -102,7 +102,7 @@ namespace Authentication.Controllers
             if (resp.Result == AppServiceResult.Failed) return BadRequest(resp.Data);
 
             return StatusCode(500);
-        }
+        } 
 
         [HttpPost("login2fa")]
         public async Task<IActionResult> TwoFactorLogin([FromBody] Login2FaDto model)
